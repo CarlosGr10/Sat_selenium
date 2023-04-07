@@ -31,19 +31,13 @@ def page_web():
     password.send_keys("Camilin8#")
     password.send_keys(Keys.ENTER)
 
-    # espera hasta que el elemento sea visible
-    boton_login = WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located((By.XPATH, '//*[@id="Login100_LoginButton"]'))
-    )
-
-    # hace clic en el elemento
-    boton_login.click()
-
     # segunda ventana
+    driver.get("https://www.mysuitecfdi.com/Home_Operaciones40.aspx")
 
-    addendas_element = driver.find_element_by_id('ContentPlaceHolder1_Addendas')
-    addendas_url = addendas_element.get_attribute('href')
-    addendas_url.click()
+    # Tercera ventana
+    driver.get("https://www.mysuitecfdi.com/Facturar_Pagos40.aspx")
+
+    time.sleep(30)
 
 
     '''
