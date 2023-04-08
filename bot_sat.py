@@ -31,13 +31,98 @@ def page_web():
     password.send_keys("Camilin8#")
     password.send_keys(Keys.ENTER)
 
-    # segunda ventana
+    # segunda ventana (Addendas y Complementos (CFDI 4.0))
     driver.get("https://www.mysuitecfdi.com/Home_Operaciones40.aspx")
 
-    # Tercera ventana
+    # Tercera ventana (Complemento de pago 2.0 (REP))
     driver.get("https://www.mysuitecfdi.com/Facturar_Pagos40.aspx")
 
-    time.sleep(30)
+    # Tab de Emisor
+    ddl_regimen_fiscal = driver.find_element(By.XPATH, "//*[@id=\"ddlRegimenFiscal\"]")
+    select = Select(ddl_regimen_fiscal)
+
+    # esperar hasta que el elemento esté visible
+    driver.implicitly_wait(10) # espera hasta 10 segundos
+
+    ddl_regimen_fiscal = driver.find_element(By.XPATH, "//*[@id=\"ddlRegimenFiscal\"]")
+    select = Select(ddl_regimen_fiscal)
+
+    select.select_by_value("601")
+    
+    # Tab de Receptor
+    
+    WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//*[@id=\"tabs\"]/ul/li[2]"))).click()
+    rfc = driver.finrfc = driver.find_element("xpath", "//*[@id=\"txtR_RFC\"]")
+    rfc.send_keys("CEC8504255S6")
+    rfc.send_keys(Keys.ENTER)
+
+    razon_social = driver.finrfc = driver.find_element("xpath","//*[@id=\"txtR_Name\"]")
+    razon_social.send_keys("vale")
+    razon_social.send_keys(Keys.ENTER)
+
+    
+    correo = driver.finrfc = driver.find_element("xpath","//*[@id=\"txtR_Mail\"]") 
+    correo.send_keys("vale@algo.com")
+    correo.send_keys(Keys.ENTER)
+    
+    domicilio_cp = driver.finrfc = driver.find_element("xpath","//*[@id=\"txtDomicilioFiscalReceptor\"]")
+    domicilio_cp.send_keys("1123")
+    domicilio_cp.send_keys(Keys.ENTER)
+
+    driver.implicitly_wait(10) # espera hasta 10 segundos
+    regimen_receptor = driver.find_element(By.XPATH, "//*[@id=\"ddlRegimenFiscalReceptor\"]")
+    select = Select(regimen_receptor)
+
+    select.select_by_value("601")
+
+
+    # Tab Datos del complemento
+    WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//*[@id=\"tabs\"]/ul/li[5]"))).click()
+
+    time.sleep(2)
+
+
+    # Adicionar pagos
+    button_adiciona_pago = driver.find_element("xpath", "//*[@id=\"btnAddPago\"]")
+    button_adiciona_pago.click()
+
+    fecha_pago = driver.find_element(By.ID, "txtP_FechaPago")
+    fecha_pago.send_keys("2023-03-16 12:00:00")
+    fecha_pago.send_keys(Keys.ENTER)
+
+    # Ciclo Impuestos P. Traslados
+    button_impuesto_traslado = driver.find_element("xpath", "//*[@id=\"btnAddTrasladoP\"]")
+    button_impuesto_traslado.click()
+
+    driver.implicitly_wait(10)
+    base = driver.finrfc = driver.find_element("id", "TrasladoP_BaseP")
+    base.send_keys("1")
+    base.send_keys(Keys.ENTER)
+
+    driver.implicitly_wait(10)
+    impuesto_p = driver.find_element(By.XPATH, "//*[@id=\"TrasladoP_ImpuestoP\"]")
+    select = Select(impuesto_p)
+    select.select_by_value("002")
+
+    driver.implicitly_wait(10)
+    tipo_factor = driver.find_element(By.XPATH, "//*[@id=\"TrasladoP_TipoFactorP\"]")
+    select = Select(tipo_factor)
+    select.select_by_value("Tasa")
+
+    # Boton Guardar (Ventana emergente)
+    wait = WebDriverWait(driver, 10)
+    element = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".ui-dialog-buttonpane")))
+    guardar_button = element.find_element(By.XPATH, "//button[text()='Guardar']")
+    guardar_button.click()
+
+    
+    # Ciclo Documentos relacionados
+    wait = WebDriverWait(driver, 10)
+    button_adicionar_documentos = driver.find_element("xpath", "//*[@id=\"btnAddDoc\"]")
+    button_adicionar_documentos.click()
+   
+
+    time.sleep(10)
 
 
     '''
