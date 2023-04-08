@@ -1,3 +1,4 @@
+# Selenium librerias
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
@@ -9,6 +10,9 @@ from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import ElementNotInteractableException
 import os
 import time
+
+# Mis librerias
+from leer_archivo import get_sheets
 
 
 
@@ -93,38 +97,54 @@ def page_web():
     time.sleep(1)
     
     # Ciclo Impuestos P. Traslados
-    driver.implicitly_wait(10)
-    wait = WebDriverWait(driver, 10)
-    button_impuesto_traslado = wait.until(EC.element_to_be_clickable((By.ID, 'btnAddTrasladoP')))
-    attempts = 0
-    while attempts < 5:
-        try:
-            button_impuesto_traslado.click()
-            break
-        except ElementNotInteractableException:
-            attempts += 1
+    lista_impuestos_p_traslados = [get_sheets()[3][16]['SubT_Linea'],
+                                   get_sheets()[3][17]['*Tipo Factor P:'],
+                                   get_sheets()[3][18]['Iva_Linea'],
+                                   get_sheets()[3][19]['*Impuesto P'],
+                                   get_sheets()[3][20]['Tasa o Cuota P:']]
 
-    driver.implicitly_wait(10)
-    base = driver.finrfc = driver.find_element(By.XPATH, '//*[@id="TrasladoP_BaseP"]')
-    base.send_keys(1)
-    base.send_keys(Keys.ENTER)
-   
+    for i in range(len(lista_impuestos_p_traslados[0])):
+        driver.implicitly_wait(10)
+        wait = WebDriverWait(driver, 10)
+        button_impuesto_traslado = wait.until(EC.element_to_be_clickable((By.ID, 'btnAddTrasladoP')))
+        attempts = 0
+        while attempts < 5:
+            try:
+                button_impuesto_traslado.click()
+                break
+            except ElementNotInteractableException:
+                attempts += 1
 
-    driver.implicitly_wait(10)
-    impuesto_p = driver.find_element(By.XPATH, "//*[@id=\"TrasladoP_ImpuestoP\"]")
-    select = Select(impuesto_p)
-    select.select_by_value("002")
+        driver.implicitly_wait(10)
+        base = driver.finrfc = driver.find_element(By.XPATH, '//*[@id="TrasladoP_BaseP"]')
+        base.send_keys(lista_impuestos_p_traslados[0][i])
+        base.send_keys(Keys.ENTER)
+    
 
-    driver.implicitly_wait(10)
-    tipo_factor = driver.find_element(By.XPATH, "//*[@id=\"TrasladoP_TipoFactorP\"]")
-    select = Select(tipo_factor)
-    select.select_by_value("Tasa")
+        driver.implicitly_wait(10)
+        impuesto_p = driver.find_element(By.XPATH, "//*[@id=\"TrasladoP_ImpuestoP\"]")
+        select = Select(impuesto_p)
+        select.select_by_value("002")
 
-    # Boton Guardar (Ventana emergente)
-    wait = WebDriverWait(driver, 10)
-    element = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".ui-dialog-buttonpane")))
-    guardar_button = element.find_element(By.XPATH, "//button[text()='Guardar']")
-    guardar_button.click()
+        driver.implicitly_wait(10)
+        tipo_factor = driver.find_element(By.XPATH, "//*[@id=\"TrasladoP_TipoFactorP\"]")
+        select = Select(tipo_factor)
+        select.select_by_value("Tasa")
+        
+        tasa_cuota = driver.finrfc = driver.find_element(By.XPATH,'//*[@id="TrasladoP_TasaOCuotaP"]')
+        tasa_cuota.send_keys(lista_impuestos_p_traslados[4][i])
+        tasa_cuota.send_keys(Keys.ENTER)
+
+        importe = driver.finrfc = driver.find_element(By.XPATH,'//*[@id="TrasladoP_ImporteP"]')
+        importe.send_keys(lista_impuestos_p_traslados[2][i])
+        importe.send_keys(Keys.ENTER)
+
+
+        # Boton Guardar (Ventana emergente)
+        wait = WebDriverWait(driver, 10)
+        element = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".ui-dialog-buttonpane")))
+        guardar_button = element.find_element(By.XPATH, "//button[text()='Guardar']")
+        guardar_button.click()
 
     
     # Ciclo Documentos relacionados
@@ -174,12 +194,10 @@ def page_web():
     select = Select(obj_im_dr)
     select.select_by_value("03")
 
-    buttom_adicion = guardar_button = element.find_element("xpath", '//*[@id="btnAddOkDoc"]')
+    buttom_adicion = element.find_element("xpath", '//*[@id="btnAddOkDoc"]')
     buttom_adicion.click()
-
     
-    
-    time.sleep(2)
+    time.sleep(30)
 
 
     '''
