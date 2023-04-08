@@ -14,9 +14,7 @@ import time
 # Mis librerias
 from leer_archivo import get_sheets
 
-
-
-def page_web():
+def page_web(num_factura):
     # Este es el webdriver definido
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
@@ -97,11 +95,11 @@ def page_web():
     time.sleep(1)
     
     # Ciclo Impuestos P. Traslados
-    lista_impuestos_p_traslados = [get_sheets()[3][16]['SubT_Linea'],
-                                   get_sheets()[3][17]['*Tipo Factor P:'],
-                                   get_sheets()[3][18]['Iva_Linea'],
-                                   get_sheets()[3][19]['*Impuesto P'],
-                                   get_sheets()[3][20]['Tasa o Cuota P:']]
+    lista_impuestos_p_traslados = [get_sheets()[num_factura][16]['SubT_Linea'],
+                                   get_sheets()[num_factura][17]['*Tipo Factor P:'],
+                                   get_sheets()[num_factura][18]['Iva_Linea'],
+                                   get_sheets()[num_factura][19]['*Impuesto P'],
+                                   get_sheets()[num_factura][20]['Tasa o Cuota P:']]
 
     for i in range(len(lista_impuestos_p_traslados[0])):
         driver.implicitly_wait(10)
@@ -148,57 +146,74 @@ def page_web():
 
     
     # Ciclo Documentos relacionados
-    wait = WebDriverWait(driver, 10)
-    button_adicionar_documentos = driver.find_element("xpath", "//*[@id=\"btnAddDoc\"]")
-    button_adicionar_documentos.click()
 
-    id_doc = driver.finrfc = driver.find_element("xpath",'//*[@id="txtPDoc_IdDocumento"]')
-    id_doc.send_keys("HOLAAAAAA")
-    id_doc.send_keys(Keys.ENTER)
-    
-    serie = driver.finrfc = driver.find_element("xpath",'//*[@id="txtPDoc_Serie"]')
-    serie.send_keys("A")
-    serie.send_keys(Keys.ENTER)
-    
-    folio = driver.finrfc = driver.find_element("xpath",'//*[@id="txtPDoc_Folio"]')
-    folio.send_keys("B")
-    folio.send_keys(Keys.ENTER)
-    
-    equivalencia = driver.finrfc = driver.find_element("xpath",'//*[@id="txtPDoc_TipoCambioDR"]')
-    equivalencia.send_keys("1")
-    equivalencia.send_keys(Keys.ENTER)
-    
-    num_parcialidad = driver.finrfc = driver.find_element("xpath",'//*[@id="txtPDoc_NumParcialidad"]')
-    num_parcialidad.send_keys("2")
-    num_parcialidad.send_keys(Keys.ENTER)
-    
-    sueldo_anterior = driver.finrfc = driver.find_element("xpath",'//*[@id="txtPDoc_ImpSaldoAnt"]')
-    sueldo_anterior.send_keys("3")
-    sueldo_anterior.send_keys(Keys.ENTER)
-    
-    imp_pagado = driver.finrfc = driver.find_element("xpath",'//*[@id="txtPDoc_ImpPagado"]')
-    imp_pagado.send_keys("4")
-    imp_pagado.send_keys(Keys.ENTER)
-    
-    sueldo_insoluto = driver.finrfc = driver.find_element("xpath",'//*[@id="txtPDoc_ImpSaldoInsoluto"]')
-    sueldo_insoluto.send_keys("5")
-    sueldo_insoluto.send_keys(Keys.ENTER)
+    lista_documentos_relacionados = [get_sheets()[num_factura][21]['*Id Doc.:'],
+                                     get_sheets()[num_factura][22]['serie_dr'],
+                                     get_sheets()[num_factura][23]['*Moneda DR:'],
+                                     get_sheets()[num_factura][24]['*Núm. Parcialidad'],
+                                     get_sheets()[num_factura][25]['*Saldo Anterior.:'],
+                                     get_sheets()[num_factura][26]['*Objeto Imp DR:'],
+                                     get_sheets()[num_factura][27]['Folio'],
+                                     get_sheets()[num_factura][28]['Equivalencia:'],
+                                     get_sheets()[num_factura][29]['*Imp. Pagado'],
+                                     get_sheets()[num_factura][30]['*Saldo Insoluto:']]
 
-    driver.implicitly_wait(10)
-    moneda = driver.find_element(By.XPATH, '//*[@id="ddlPDoc_MonedaDR"]')
-    select = Select(moneda)
-    select.select_by_value("MXN|2")
+    for i in range(len(lista_impuestos_p_traslados[0])):
+        wait = WebDriverWait(driver, 10)
+        button_adicionar_documentos = driver.find_element("xpath", "//*[@id=\"btnAddDoc\"]")
+        button_adicionar_documentos.click()
 
-    driver.implicitly_wait(10)
-    obj_im_dr = driver.find_element(By.XPATH, '//*[@id="ddlPDoc_ObjetoImpDR"]')
-    select = Select(obj_im_dr)
-    select.select_by_value("03")
+        id_doc = driver.finrfc = driver.find_element("xpath",'//*[@id="txtPDoc_IdDocumento"]')
+        id_doc.send_keys(lista_documentos_relacionados[0][i])
+        id_doc.send_keys(Keys.ENTER)
+        
+        serie = driver.finrfc = driver.find_element("xpath",'//*[@id="txtPDoc_Serie"]')
+        serie.send_keys(lista_documentos_relacionados[1][i])
+        serie.send_keys(Keys.ENTER)
+        
+        folio = driver.finrfc = driver.find_element("xpath",'//*[@id="txtPDoc_Folio"]')
+        folio.send_keys(lista_documentos_relacionados[6][i])
+        folio.send_keys(Keys.ENTER)
+        
+        equivalencia = driver.finrfc = driver.find_element("xpath",'//*[@id="txtPDoc_TipoCambioDR"]')
+        equivalencia.send_keys(lista_documentos_relacionados[7][i])
+        equivalencia.send_keys(Keys.ENTER)
+        
+        num_parcialidad = driver.finrfc = driver.find_element("xpath",'//*[@id="txtPDoc_NumParcialidad"]')
+        num_parcialidad.send_keys(lista_documentos_relacionados[3][i])
+        num_parcialidad.send_keys(Keys.ENTER)
+        
+        sueldo_anterior = driver.finrfc = driver.find_element("xpath",'//*[@id="txtPDoc_ImpSaldoAnt"]')
+        sueldo_anterior.send_keys(lista_documentos_relacionados[4][i])
+        sueldo_anterior.send_keys(Keys.ENTER)
+        
+        imp_pagado = driver.finrfc = driver.find_element("xpath",'//*[@id="txtPDoc_ImpPagado"]')
+        imp_pagado.send_keys(lista_documentos_relacionados[8][i])
+        imp_pagado.send_keys(Keys.ENTER)
+        
+        sueldo_insoluto = driver.finrfc = driver.find_element("xpath",'//*[@id="txtPDoc_ImpSaldoInsoluto"]')
+        sueldo_insoluto.send_keys(lista_documentos_relacionados[9][i])
+        sueldo_insoluto.send_keys(Keys.ENTER)
 
-    buttom_adicion = element.find_element("xpath", '//*[@id="btnAddOkDoc"]')
-    buttom_adicion.click()
+        driver.implicitly_wait(10)
+        moneda = driver.find_element(By.XPATH, '//*[@id="ddlPDoc_MonedaDR"]')
+        select = Select(moneda)
+        select.select_by_value("MXN|2")
+
+        driver.implicitly_wait(10)
+        obj_im_dr = driver.find_element(By.XPATH, '//*[@id="ddlPDoc_ObjetoImpDR"]')
+        select = Select(obj_im_dr)
+        select.select_by_value("02")
+
+        buttom_adicion = element.find_element("xpath", '//*[@id="btnAddOkDoc"]')
+        buttom_adicion.click()
+
     
-    time.sleep(30)
+    print("Factura Num. {}".format(get_sheets()[num_factura][0]['ID']))
 
+    time.sleep(1)
+
+    driver.quit()
 
     '''
     se le da click ===> Addendas y Complementos (CFDI 4.0)
@@ -213,10 +228,11 @@ def page_web():
 
     Generar CDFI
 
-
-
     '''
 
+
+
 if __name__ == "__main__":
-    page_web()
+    for i in range(2):
+        page_web(i)
 

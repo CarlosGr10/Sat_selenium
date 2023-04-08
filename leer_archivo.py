@@ -84,7 +84,7 @@ def get_sheets():
                 'Equivalencia:':row['Equivalencia:'],
                 '*Imp. Pagado':row['*Imp. Pagado'],
                 '*Saldo Insoluto:':row['*Saldo Insoluto:']}
-        factura.append([{'ID',dic['ID']},
+        factura.append([{'ID':dic['ID']},
                         {'*Régimen Fiscal:':dic['*Régimen Fiscal:']},
                         {'*RFC:':dic['*RFC:']},
                         {'*Razón Social':dic['*Razón Social']},
@@ -119,7 +119,7 @@ def get_sheets():
 
     return factura
 
-print(get_sheets()[3][16]['SubT_Linea'])
+#print(get_sheets()[2][0]['ID'])
 
 if __name__ == '__main__':
     get_sheets()
