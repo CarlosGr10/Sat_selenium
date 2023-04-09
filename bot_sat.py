@@ -81,9 +81,24 @@ def page_web(num_factura):
     # Tab Datos del complemento
     WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//*[@id=\"tabs\"]/ul/li[5]"))).click()
 
+    # TOTALES
+    taslados_base_iva = driver.finrfc = driver.find_element("xpath",'//*[@id="txtP_T_BaseIVA16"]')
+    taslados_base_iva.send_keys(get_sheets()[num_factura][8]['Traslados Base IVA 16'])
+    taslados_base_iva.send_keys(Keys.ENTER)
+
+    monto_total_pagos = driver.finrfc = driver.find_element("xpath",'//*[@id="txtP_T_MontoTotalPagos"]')
+    monto_total_pagos.send_keys(get_sheets()[num_factura][9]['Income Amount SUM 1'])
+    monto_total_pagos.send_keys(Keys.ENTER)
+
+    traslados_impuesto = driver.finrfc = driver.find_element("xpath",'//*[@id="txtP_T_ImpuestosIVA16"]') 
+    traslados_impuesto.send_keys(get_sheets()[num_factura][10]['Traslados Impuestos IVA 16:'])
+    traslados_impuesto.send_keys(Keys.ENTER)
+
+
     time.sleep(1)
 
     # Adicionar pagos
+    driver.implicitly_wait(10) # espera hasta 10 segundos
     button_adiciona_pago = driver.find_element("xpath", "//*[@id=\"btnAddPago\"]")
     button_adiciona_pago.click()
 
