@@ -5,7 +5,7 @@
     Se le da click al tab de Receptor ==> Llenar datos
     se salta a al tab Datos del complemento ===> LLenar datos
 
-    Realizar un cliclo en (Impuestos P. Traslados)[Ciclo direto]
+    se llenan (Impuestos P. Traslados)
 
     Llenar Documentos Relacionados
     Dar click en ===> Completar adicion/adicion del doc [ciclo anidado]

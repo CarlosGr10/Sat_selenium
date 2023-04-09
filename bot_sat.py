@@ -132,72 +132,75 @@ def page_web(num_factura, debug):
 
     time.sleep(1)
     
-    # Ciclo Impuestos P. Traslados
-    lista_impuestos_p_traslados = [delete_nan(get_sheets()[num_factura][16]['SubT_Linea']),
-                                   delete_nan(get_sheets()[num_factura][17]['*Tipo Factor P:']),
-                                   delete_nan(get_sheets()[num_factura][18]['Iva_Linea']),
-                                   delete_nan(get_sheets()[num_factura][19]['*Impuesto P']),
-                                   delete_nan(get_sheets()[num_factura][20]['Tasa o Cuota P:'])]
-
-    for i in range(len(lista_impuestos_p_traslados[0])):
-        driver.implicitly_wait(10)
-        wait = WebDriverWait(driver, 10)
-        button_impuesto_traslado = wait.until(EC.element_to_be_clickable((By.ID, 'btnAddTrasladoP')))
-        attempts = 0
-        while attempts < 5:
-            try:
-                button_impuesto_traslado.click()
-                break
-            except ElementNotInteractableException:
-                attempts += 1
-
-        driver.implicitly_wait(10)
-        base = driver.finrfc = driver.find_element(By.XPATH, '//*[@id="TrasladoP_BaseP"]')
-        base.send_keys(lista_impuestos_p_traslados[0][i])
-        base.send_keys(Keys.ENTER)
+    # Impuestos P. Traslados
     
+    driver.implicitly_wait(10)
+    wait = WebDriverWait(driver, 10)
+    button_impuesto_traslado = wait.until(EC.element_to_be_clickable((By.ID, 'btnAddTrasladoP')))
+    attempts = 0
+    while attempts < 5:
+        try:
+            button_impuesto_traslado.click()
+            break
+        except ElementNotInteractableException:
+            attempts += 1
 
-        driver.implicitly_wait(10)
-        impuesto_p = driver.find_element(By.XPATH, "//*[@id=\"TrasladoP_ImpuestoP\"]")
-        select = Select(impuesto_p)
-        select.select_by_value("002")
-
-        driver.implicitly_wait(10)
-        tipo_factor = driver.find_element(By.XPATH, "//*[@id=\"TrasladoP_TipoFactorP\"]")
-        select = Select(tipo_factor)
-        select.select_by_value("Tasa")
-        
-        tasa_cuota = driver.finrfc = driver.find_element(By.XPATH,'//*[@id="TrasladoP_TasaOCuotaP"]')
-        tasa_cuota.send_keys(lista_impuestos_p_traslados[4][i])
-        tasa_cuota.send_keys(Keys.ENTER)
-
-        importe = driver.finrfc = driver.find_element(By.XPATH,'//*[@id="TrasladoP_ImporteP"]')
-        importe.send_keys(lista_impuestos_p_traslados[2][i])
-        importe.send_keys(Keys.ENTER)
+    driver.implicitly_wait(10)
+    base = driver.finrfc = driver.find_element(By.XPATH, '//*[@id="TrasladoP_BaseP"]')
+    base.clear()
+    base.send_keys(round(get_sheets()[num_factura][8]['Traslados Base IVA 16'],2))
+    base.send_keys(Keys.ENTER)
 
 
-        # Boton Guardar (Ventana emergente)
-        wait = WebDriverWait(driver, 10)
-        element = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".ui-dialog-buttonpane")))
-        guardar_button = element.find_element(By.XPATH, "//button[text()='Guardar']")
-        guardar_button.click()
+    driver.implicitly_wait(10)
+    impuesto_p = driver.find_element(By.XPATH, "//*[@id=\"TrasladoP_ImpuestoP\"]")
+    select = Select(impuesto_p)
+    select.select_by_value("002")
+
+    driver.implicitly_wait(10)
+    tipo_factor = driver.find_element(By.XPATH, "//*[@id=\"TrasladoP_TipoFactorP\"]")
+    select = Select(tipo_factor)
+    select.select_by_value("Tasa")
+    
+    tasa_cuota = driver.finrfc = driver.find_element(By.XPATH,'//*[@id="TrasladoP_TasaOCuotaP"]')
+    tasa_cuota.clear()
+    tasa_cuota.send_keys('0.160000')
+    tasa_cuota.send_keys(Keys.ENTER)
+
+    
+    importe = driver.finrfc = driver.find_element(By.XPATH,'//*[@id="TrasladoP_ImporteP"]')
+    importe.clear()
+    importe.send_keys(round(get_sheets()[num_factura][10]['Traslados Impuestos IVA 16:'],2))
+    importe.send_keys(Keys.ENTER)
+
+
+    # Boton Guardar (Ventana emergente)
+    wait = WebDriverWait(driver, 10)
+    element = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".ui-dialog-buttonpane")))
+    guardar_button = element.find_element(By.XPATH, "//button[text()='Guardar']")
+    guardar_button.click()
 
     
     # Ciclo Documentos relacionados
 
-    lista_documentos_relacionados = [delete_nan(get_sheets()[num_factura][21]['*Id Doc.:']),
-                                     delete_nan(get_sheets()[num_factura][22]['serie_dr']),
-                                     delete_nan(get_sheets()[num_factura][23]['*Moneda DR:']),
-                                     delete_nan(get_sheets()[num_factura][24]['*Núm. Parcialidad']),
-                                     delete_nan(get_sheets()[num_factura][25]['*Saldo Anterior.:']),
-                                     delete_nan(get_sheets()[num_factura][26]['*Objeto Imp DR:']),
-                                     delete_nan(get_sheets()[num_factura][27]['Folio']),
-                                     delete_nan(get_sheets()[num_factura][28]['Equivalencia:']),
-                                     delete_nan(get_sheets()[num_factura][29]['*Imp. Pagado']),
-                                     delete_nan(get_sheets()[num_factura][30]['*Saldo Insoluto:'])]
+    lista_documentos_relacionados = [delete_nan(get_sheets()[num_factura][21]['*Id Doc.:']),#0
+                                     delete_nan(get_sheets()[num_factura][22]['serie_dr']),#1
+                                     delete_nan(get_sheets()[num_factura][23]['*Moneda DR:']),#2
+                                     delete_nan(get_sheets()[num_factura][24]['*Núm. Parcialidad']),#3
+                                     delete_nan(get_sheets()[num_factura][25]['*Saldo Anterior.:']),#4
+                                     delete_nan(get_sheets()[num_factura][26]['*Objeto Imp DR:']),#5
+                                     delete_nan(get_sheets()[num_factura][27]['Folio']),#6
+                                     delete_nan(get_sheets()[num_factura][28]['Equivalencia:']),#7
+                                     delete_nan(get_sheets()[num_factura][29]['*Imp. Pagado']),#8
+                                     delete_nan(get_sheets()[num_factura][30]['*Saldo Insoluto:']),#9
+                                     delete_nan(get_sheets()[num_factura][16]['SubT_Linea']),#10 --- 
+                                     delete_nan(get_sheets()[num_factura][17]['*Tipo Factor P:']),#11
+                                     delete_nan(get_sheets()[num_factura][18]['Iva_Linea']),#12
+                                     delete_nan(get_sheets()[num_factura][19]['*Impuesto P']),#13
+                                     delete_nan(get_sheets()[num_factura][20]['Tasa o Cuota P:'])]#14
 
-    for i in range(len(lista_impuestos_p_traslados[0])):
-        wait = WebDriverWait(driver, 10)
+    for i in range(len(lista_documentos_relacionados[0])):
+        wait = WebDriverWait(driver, 5)
         button_adicionar_documentos = driver.find_element("xpath", "//*[@id=\"btnAddDoc\"]")
         button_adicionar_documentos.click()
 
@@ -221,17 +224,22 @@ def page_web(num_factura, debug):
         num_parcialidad.send_keys(lista_documentos_relacionados[3][i])
         num_parcialidad.send_keys(Keys.ENTER)
         
-        sueldo_anterior = driver.finrfc = driver.find_element("xpath",'//*[@id="txtPDoc_ImpSaldoAnt"]')
-        sueldo_anterior.send_keys(lista_documentos_relacionados[4][i])
-        sueldo_anterior.send_keys(Keys.ENTER)
+        saldo_anterior = driver.finrfc = driver.find_element("xpath",'//*[@id="txtPDoc_ImpSaldoAnt"]')
+        saldo_anterior.clear()
+        saldo_anterior.send_keys(round(lista_documentos_relacionados[4][i],2))
+        saldo_anterior.send_keys(Keys.ENTER)
         
         imp_pagado = driver.finrfc = driver.find_element("xpath",'//*[@id="txtPDoc_ImpPagado"]')
-        imp_pagado.send_keys(lista_documentos_relacionados[8][i])
+        imp_pagado.clear()
+        print(lista_documentos_relacionados[8][i])
+        print(round(lista_documentos_relacionados[8][i],2))
+        imp_pagado.send_keys(round(lista_documentos_relacionados[8][i],2))
         imp_pagado.send_keys(Keys.ENTER)
         
-        sueldo_insoluto = driver.finrfc = driver.find_element("xpath",'//*[@id="txtPDoc_ImpSaldoInsoluto"]')
-        sueldo_insoluto.send_keys(lista_documentos_relacionados[9][i])
-        sueldo_insoluto.send_keys(Keys.ENTER)
+        saldo_insoluto = driver.finrfc = driver.find_element("xpath",'//*[@id="txtPDoc_ImpSaldoInsoluto"]')
+        saldo_insoluto.clear()
+        saldo_insoluto.send_keys('0.00')
+        saldo_insoluto.send_keys(Keys.ENTER)
 
         driver.implicitly_wait(10)
         moneda = driver.find_element(By.XPATH, '//*[@id="ddlPDoc_MonedaDR"]')
@@ -243,28 +251,83 @@ def page_web(num_factura, debug):
         select = Select(obj_im_dr)
         select.select_by_value("02")
 
+        # Agregar traslado
+
+        driver.implicitly_wait(10)
+        wait = WebDriverWait(driver, 10)
+        button_impuesto_traslado_dr = wait.until(EC.element_to_be_clickable((By.ID, 'btnAddTrasladoDR')))
+        attempts = 0
+        while attempts < 5:
+            try:
+                button_impuesto_traslado_dr.click()
+                break
+            except ElementNotInteractableException:
+                attempts += 1
+
+
+
+        driver.implicitly_wait(10)
+        base_dr = driver.finrfc = driver.find_element(By.XPATH, '//*[@id="TrasladoDR_BaseDR"]')
+        base_dr.send_keys(round(lista_documentos_relacionados[10][i],2))
+        base_dr.send_keys(Keys.ENTER)
+
+
+        driver.implicitly_wait(10)
+        impuesto_p_dr = driver.find_element(By.XPATH, '//*[@id="TrasladoDR_ImpuestoDR"]')
+        select = Select(impuesto_p_dr)
+        select.select_by_value("002")
+
+        driver.implicitly_wait(10)
+        tipo_factor_dr = driver.find_element(By.XPATH, '//*[@id="TrasladoDR_TipoFactorDR"]')
+        select = Select(tipo_factor_dr)
+        select.select_by_value("Tasa")
+        
+        tasa_cuota_dr = driver.finrfc = driver.find_element(By.XPATH,'//*[@id="TrasladoDR_TasaOCuotaDR"]')
+        tasa_cuota_dr.clear()
+        tasa_cuota_dr.send_keys('0.160000')
+        tasa_cuota_dr.send_keys(Keys.ENTER)
+
+        importe_dr = driver.finrfc = driver.find_element(By.XPATH,'//*[@id="TrasladoDR_ImporteDR"]')
+        importe_dr.clear()
+        importe_dr.send_keys(round(lista_documentos_relacionados[12][i],2))
+        importe_dr.send_keys(Keys.ENTER)
+
+        # Boton Guardar (Ventana emergente)
+        wait = WebDriverWait(driver, 10)
+        element = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".ui-dialog-buttonpane")))
+        guardar_button_dr = element.find_element(By.XPATH, '/html/body/div[13]/div[3]/div/button[1]')
+        guardar_button_dr.click()
+
+        # Boton para agregar otro UUid
         buttom_adicion = element.find_element("xpath", '//*[@id="btnAddOkDoc"]')
         buttom_adicion.click()
 
-    wait = WebDriverWait(driver, 10)
-    button_adicionar_documentos = driver.find_element("xpath", '//*[@id="btnAddOkPago"]')
-    button_adicionar_documentos.click()
-
+    
     # Generar CDFI
     
     production = debug
     
     if production == True:
+
         wait = WebDriverWait(driver, 10)
-        button_adicionar_documentos = driver.find_element("xpath", '//*[@id="Button3"]')
+        button_adicionar_documentos = driver.find_element("xpath", '//*[@id="btnAddOkPago"]')
         button_adicionar_documentos.click()
+
+        wait = WebDriverWait(driver, 10)
+        button_generar_cdfi = driver.find_element("xpath", '//*[@id="Button3"]')
+        button_generar_cdfi.click()
+
+        wait = WebDriverWait(driver, 10)
+        button_generar = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Generar']")))
+        button_generar.click()
+
     else:
         pass
         
     
     print("Factura Num. {}".format(get_sheets()[num_factura][0]['ID']))
 
-    time.sleep(1)
+    time.sleep(300)
 
     driver.quit()
 
@@ -280,10 +343,10 @@ if __name__ == "__main__":
     """
 
     inicio = 1
-    fin = 10
+    fin = 1
 
     rango_personalizado = range((inicio - 1), fin)
 
     for i in rango_personalizado:
-        page_web(i, True)
+        page_web(i, False)
 

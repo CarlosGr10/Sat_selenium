@@ -3,7 +3,7 @@ import os
 
 def path_system():
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__)) + "/files"
-    my_file = os.path.join(THIS_FOLDER, 'sat.xlsx')
+    my_file = os.path.join(THIS_FOLDER, 'sat_final.xlsx')
     return my_file
 
 def get_sheets():
@@ -144,25 +144,35 @@ def delete_nan(list_factura):
     new_list = [item for item in list_factura if not(pd.isnull(item)) == True]
     return new_list
 
-
 """
-factura = 136
+
+factura = 1
 lista_factura = get_sheets()[factura - 1][0]['ID']
 
 lista_impuestos_p_traslados = [delete_nan(get_sheets()[factura - 1][16]['SubT_Linea']),
                                 delete_nan(get_sheets()[factura - 1][17]['*Tipo Factor P:']),
                                 delete_nan(get_sheets()[factura - 1][18]['Iva_Linea']),
                                 delete_nan(get_sheets()[factura - 1][19]['*Impuesto P']),
-                                delete_nan(get_sheets()[factura - 1][20]['Tasa o Cuota P:'])]
+                                delete_nan(get_sheets()[factura - 1][20]['Tasa o Cuota P:']),
+                                delete_nan(get_sheets()[factura - 1][21]['*Id Doc.:']),
+                                delete_nan(get_sheets()[factura - 1][22]['serie_dr']),
+                                delete_nan(get_sheets()[factura - 1][23]['*Moneda DR:']),
+                                delete_nan(get_sheets()[factura - 1][24]['*Núm. Parcialidad']),
+                                delete_nan(get_sheets()[factura - 1][25]['*Saldo Anterior.:']),
+                                delete_nan(get_sheets()[factura - 1][26]['*Objeto Imp DR:']),
+                                delete_nan(get_sheets()[factura - 1][27]['Folio']),
+                                delete_nan(get_sheets()[factura - 1][28]['Equivalencia:']),
+                                delete_nan(get_sheets()[factura - 1][29]['*Imp. Pagado']),
+                                delete_nan(get_sheets()[factura - 1][30]['*Saldo Insoluto:']),]
 
-
+                                     
+                                   
 print(f"factura: {lista_factura}")
 
 for i in lista_impuestos_p_traslados:
-    print(len(i))
-
-for i in lista_impuestos_p_traslados:
     print(i)
+
+print(lista_impuestos_p_traslados)
 
 """
 
