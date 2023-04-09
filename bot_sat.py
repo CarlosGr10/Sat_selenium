@@ -88,8 +88,28 @@ def page_web(num_factura):
     button_adiciona_pago.click()
 
     fecha_pago = driver.find_element(By.ID, "txtP_FechaPago")
-    fecha_pago.send_keys("2023-03-16 12:00:00")
+    fecha_pago.send_keys(str(get_sheets()[num_factura][11]['*Fecha Pago:']))
     fecha_pago.send_keys(Keys.ENTER)
+
+    driver.implicitly_wait(10)
+    moneda_p = driver.find_element(By.XPATH, '//*[@id="ddlP_MonedaP"]')
+    select = Select(moneda_p)
+    select.select_by_value("MXN|2")
+
+    driver.implicitly_wait(10)
+    forma_pago_p = driver.find_element(By.XPATH, '//*[@id="ddlP_FormaDePagoP"]')
+    select = Select(forma_pago_p)
+    select.select_by_value("03")
+
+    driver.implicitly_wait(10)
+    tipo_cambio = driver.finrfc = driver.find_element(By.XPATH, '//*[@id="txtP_TipoCambioP"]')
+    tipo_cambio.send_keys("1")
+    tipo_cambio.send_keys(Keys.ENTER)
+
+    driver.implicitly_wait(10)
+    monto = driver.finrfc = driver.find_element(By.XPATH, '//*[@id="txtP_Monto"]')
+    monto.send_keys(get_sheets()[num_factura][15]['*Monto:'])
+    monto.send_keys(Keys.ENTER)
 
     time.sleep(1)
     
@@ -232,6 +252,12 @@ def page_web(num_factura):
 
 
 if __name__ == "__main__":
-    for i in range(1):
+
+    inicio = 4
+    fin = 4
+
+    rango_personalizado = range((inicio - 1), fin)
+
+    for i in rango_personalizado:
         page_web(i)
 
