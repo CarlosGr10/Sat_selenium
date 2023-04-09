@@ -12,9 +12,9 @@ import os
 import time
 
 # Mis librerias
-from leer_archivo import get_sheets
+from leer_archivo import get_sheets, delete_nan
 
-def page_web(num_factura):
+def page_web(num_factura, debug):
     # Este es el webdriver definido
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
@@ -103,8 +103,12 @@ def page_web(num_factura):
     button_adiciona_pago.click()
 
     fecha_pago = driver.find_element(By.ID, "txtP_FechaPago")
+    driver.execute_script("arguments[0].removeAttribute('readonly', 'readonly')", fecha_pago)  # remove readonly attribute
+    fecha_pago.clear()
     fecha_pago.send_keys(str(get_sheets()[num_factura][11]['*Fecha Pago:']))
     fecha_pago.send_keys(Keys.ENTER)
+
+    print(str(get_sheets()[num_factura][11]['*Fecha Pago:']))
 
     driver.implicitly_wait(10)
     moneda_p = driver.find_element(By.XPATH, '//*[@id="ddlP_MonedaP"]')
@@ -129,11 +133,11 @@ def page_web(num_factura):
     time.sleep(1)
     
     # Ciclo Impuestos P. Traslados
-    lista_impuestos_p_traslados = [get_sheets()[num_factura][16]['SubT_Linea'],
-                                   get_sheets()[num_factura][17]['*Tipo Factor P:'],
-                                   get_sheets()[num_factura][18]['Iva_Linea'],
-                                   get_sheets()[num_factura][19]['*Impuesto P'],
-                                   get_sheets()[num_factura][20]['Tasa o Cuota P:']]
+    lista_impuestos_p_traslados = [delete_nan(get_sheets()[num_factura][16]['SubT_Linea']),
+                                   delete_nan(get_sheets()[num_factura][17]['*Tipo Factor P:']),
+                                   delete_nan(get_sheets()[num_factura][18]['Iva_Linea']),
+                                   delete_nan(get_sheets()[num_factura][19]['*Impuesto P']),
+                                   delete_nan(get_sheets()[num_factura][20]['Tasa o Cuota P:'])]
 
     for i in range(len(lista_impuestos_p_traslados[0])):
         driver.implicitly_wait(10)
@@ -181,16 +185,16 @@ def page_web(num_factura):
     
     # Ciclo Documentos relacionados
 
-    lista_documentos_relacionados = [get_sheets()[num_factura][21]['*Id Doc.:'],
-                                     get_sheets()[num_factura][22]['serie_dr'],
-                                     get_sheets()[num_factura][23]['*Moneda DR:'],
-                                     get_sheets()[num_factura][24]['*Núm. Parcialidad'],
-                                     get_sheets()[num_factura][25]['*Saldo Anterior.:'],
-                                     get_sheets()[num_factura][26]['*Objeto Imp DR:'],
-                                     get_sheets()[num_factura][27]['Folio'],
-                                     get_sheets()[num_factura][28]['Equivalencia:'],
-                                     get_sheets()[num_factura][29]['*Imp. Pagado'],
-                                     get_sheets()[num_factura][30]['*Saldo Insoluto:']]
+    lista_documentos_relacionados = [delete_nan(get_sheets()[num_factura][21]['*Id Doc.:']),
+                                     delete_nan(get_sheets()[num_factura][22]['serie_dr']),
+                                     delete_nan(get_sheets()[num_factura][23]['*Moneda DR:']),
+                                     delete_nan(get_sheets()[num_factura][24]['*Núm. Parcialidad']),
+                                     delete_nan(get_sheets()[num_factura][25]['*Saldo Anterior.:']),
+                                     delete_nan(get_sheets()[num_factura][26]['*Objeto Imp DR:']),
+                                     delete_nan(get_sheets()[num_factura][27]['Folio']),
+                                     delete_nan(get_sheets()[num_factura][28]['Equivalencia:']),
+                                     delete_nan(get_sheets()[num_factura][29]['*Imp. Pagado']),
+                                     delete_nan(get_sheets()[num_factura][30]['*Saldo Insoluto:'])]
 
     for i in range(len(lista_impuestos_p_traslados[0])):
         wait = WebDriverWait(driver, 10)
@@ -242,6 +246,21 @@ def page_web(num_factura):
         buttom_adicion = element.find_element("xpath", '//*[@id="btnAddOkDoc"]')
         buttom_adicion.click()
 
+    wait = WebDriverWait(driver, 10)
+    button_adicionar_documentos = driver.find_element("xpath", '//*[@id="btnAddOkPago"]')
+    button_adicionar_documentos.click()
+
+    # Generar CDFI
+    
+    production = debug
+    
+    if production == True:
+        wait = WebDriverWait(driver, 10)
+        button_adicionar_documentos = driver.find_element("xpath", '//*[@id="Button3"]')
+        button_adicionar_documentos.click()
+    else:
+        pass
+        
     
     print("Factura Num. {}".format(get_sheets()[num_factura][0]['ID']))
 
@@ -249,30 +268,22 @@ def page_web(num_factura):
 
     driver.quit()
 
-    '''
-    se le da click ===> Addendas y Complementos (CFDI 4.0)
-    se le da click a ===> Complemento de pago 2.0 (REP)
-    Se le da click al tab de Receptor ==> Llenar datos
-    se salta a al tab Datos del complemento ===> LLenar datos
-
-    Realizar un cliclo en (Impuestos P. Traslados)[Ciclo direto]
-
-    Llenar Documentos Relacionados
-    Dar click en ===> Completar adicion/adicion del doc [ciclo anidado]
-
-    Generar CDFI
-
-    '''
-
-
-
 if __name__ == "__main__":
 
-    inicio = 4
-    fin = 4
+    """
+        INSTRUCTIONS
+        Varibles en uso:
+        - inicio: Desde que factura se inicia
+        - fin: Ultima factura a subir
+        - page_web(i,True or False): 
+          Si esta en Verdadero es productivo
+    """
+
+    inicio = 217
+    fin = 217
 
     rango_personalizado = range((inicio - 1), fin)
 
     for i in rango_personalizado:
-        page_web(i)
+        page_web(i, True)
 

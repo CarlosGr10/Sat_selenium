@@ -1,3 +1,20 @@
+
+    '''
+    se le da click ===> Addendas y Complementos (CFDI 4.0)
+    se le da click a ===> Complemento de pago 2.0 (REP)
+    Se le da click al tab de Receptor ==> Llenar datos
+    se salta a al tab Datos del complemento ===> LLenar datos
+
+    Realizar un cliclo en (Impuestos P. Traslados)[Ciclo direto]
+
+    Llenar Documentos Relacionados
+    Dar click en ===> Completar adicion/adicion del doc [ciclo anidado]
+
+    Generar CDFI
+
+    '''
+
+
 '*Régimen Fiscal:',
 '*RFC:',
 '*Razón Social',

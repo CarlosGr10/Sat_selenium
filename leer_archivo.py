@@ -12,10 +12,27 @@ def get_sheets():
     get_dates_xls =  pd.read_excel(path_system(), sheet_name=sheets[0])
 
     #Imprimir las cabeceras
-    cabeceras = get_dates_xls.columns.tolist()
+    #cabeceras = get_dates_xls.columns.tolist()
 
-    for i in cabeceras:
-        get_dates_xls[i] = get_dates_xls[i].fillna(method='ffill')
+    #for i in cabeceras:
+    #    get_dates_xls[i] = get_dates_xls[i].fillna(method='ffill')    
+
+    get_dates_xls['ID'] = get_dates_xls['ID'].fillna(method='ffill')
+    get_dates_xls['*Régimen Fiscal:'] = get_dates_xls['*Régimen Fiscal:'].fillna(method='ffill')
+    get_dates_xls['*RFC:'] = get_dates_xls['*RFC:'].fillna(method='ffill')
+    get_dates_xls['*Razón Social'] = get_dates_xls['*Razón Social'].fillna(method='ffill')
+    get_dates_xls['Correo:'] = get_dates_xls['Correo:'].fillna(method='ffill')
+    get_dates_xls['Domicilio Fiscal(C.P.):'] = get_dates_xls['Domicilio Fiscal(C.P.):'].fillna(method='ffill')
+    get_dates_xls['Regimen_Fiscal'] = get_dates_xls['Regimen_Fiscal'].fillna(method='ffill')
+    get_dates_xls['Customer Number'] = get_dates_xls['Customer Number'].fillna(method='ffill')
+    get_dates_xls['Traslados Base IVA 16'] = get_dates_xls['Traslados Base IVA 16'].fillna(method='ffill')
+    get_dates_xls['Income Amount SUM 1'] = get_dates_xls['Income Amount SUM 1'].fillna(method='ffill')
+    get_dates_xls['Traslados Impuestos IVA 16:'] = get_dates_xls['Traslados Impuestos IVA 16:'].fillna(method='ffill')
+    get_dates_xls['*Fecha Pago:'] = get_dates_xls['*Fecha Pago:'].fillna(method='ffill')
+    get_dates_xls['Moneda P.'] = get_dates_xls['Moneda P.'].fillna(method='ffill')
+    get_dates_xls['*Forma Pago P'] = get_dates_xls['*Forma Pago P'].fillna(method='ffill')
+    get_dates_xls['Tipo Cambio P:'] = get_dates_xls['Tipo Cambio P:'].fillna(method='ffill')
+    get_dates_xls['*Monto:'] = get_dates_xls['*Monto:'].fillna(method='ffill')
 
 
     grouped = get_dates_xls.groupby(['ID',
@@ -119,7 +136,36 @@ def get_sheets():
 
     return factura
 
-#print(get_sheets()[2][0]['ID'])
+
+
+
+
+def delete_nan(list_factura):
+    new_list = [item for item in list_factura if not(pd.isnull(item)) == True]
+    return new_list
+
+
+"""
+factura = 136
+lista_factura = get_sheets()[factura - 1][0]['ID']
+
+lista_impuestos_p_traslados = [delete_nan(get_sheets()[factura - 1][16]['SubT_Linea']),
+                                delete_nan(get_sheets()[factura - 1][17]['*Tipo Factor P:']),
+                                delete_nan(get_sheets()[factura - 1][18]['Iva_Linea']),
+                                delete_nan(get_sheets()[factura - 1][19]['*Impuesto P']),
+                                delete_nan(get_sheets()[factura - 1][20]['Tasa o Cuota P:'])]
+
+
+print(f"factura: {lista_factura}")
+
+for i in lista_impuestos_p_traslados:
+    print(len(i))
+
+for i in lista_impuestos_p_traslados:
+    print(i)
+
+"""
 
 if __name__ == '__main__':
     get_sheets()
+    
