@@ -56,27 +56,26 @@ def page_web(num_factura):
     
     WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//*[@id=\"tabs\"]/ul/li[2]"))).click()
     rfc = driver.finrfc = driver.find_element("xpath", "//*[@id=\"txtR_RFC\"]")
-    rfc.send_keys("CEC8504255S6")
+    rfc.send_keys(get_sheets()[num_factura][2]['*RFC:'])
     rfc.send_keys(Keys.ENTER)
 
     razon_social = driver.finrfc = driver.find_element("xpath","//*[@id=\"txtR_Name\"]")
-    razon_social.send_keys("vale")
+    razon_social.send_keys(get_sheets()[num_factura][3]['*Razón Social'])
     razon_social.send_keys(Keys.ENTER)
 
     
     correo = driver.finrfc = driver.find_element("xpath","//*[@id=\"txtR_Mail\"]") 
-    correo.send_keys("vale@algo.com")
+    correo.send_keys(get_sheets()[num_factura][4]['Correo:'])
     correo.send_keys(Keys.ENTER)
     
     domicilio_cp = driver.finrfc = driver.find_element("xpath","//*[@id=\"txtDomicilioFiscalReceptor\"]")
-    domicilio_cp.send_keys("1123")
+    domicilio_cp.send_keys(get_sheets()[num_factura][5]['Domicilio Fiscal(C.P.):'])
     domicilio_cp.send_keys(Keys.ENTER)
 
     driver.implicitly_wait(10) # espera hasta 10 segundos
     regimen_receptor = driver.find_element(By.XPATH, "//*[@id=\"ddlRegimenFiscalReceptor\"]")
     select = Select(regimen_receptor)
-
-    select.select_by_value("601")
+    select.select_by_value(str(int(round(get_sheets()[num_factura][6]['Regimen_Fiscal'],0))))
 
 
     # Tab Datos del complemento
@@ -233,6 +232,6 @@ def page_web(num_factura):
 
 
 if __name__ == "__main__":
-    for i in range(2):
+    for i in range(1):
         page_web(i)
 
