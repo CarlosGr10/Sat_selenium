@@ -279,8 +279,8 @@ if __name__ == "__main__":
           Si esta en Verdadero es productivo
     """
 
-    inicio = 217
-    fin = 217
+    inicio = 1
+    fin = 10
 
     rango_personalizado = range((inicio - 1), fin)
 
