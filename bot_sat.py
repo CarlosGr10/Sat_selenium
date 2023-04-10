@@ -59,39 +59,63 @@ def page_web(num_factura, debug):
     rfc.send_keys(get_sheets()[num_factura][2]['*RFC:'])
     rfc.send_keys(Keys.ENTER)
 
-    razon_social = driver.finrfc = driver.find_element("xpath","//*[@id=\"txtR_Name\"]")
+    razon_social = driver.finrfc = driver.find_element("xpath",'//*[@id="txtR_Name"]')
     razon_social.send_keys(get_sheets()[num_factura][3]['*Razón Social'])
     razon_social.send_keys(Keys.ENTER)
 
-    
-    correo = driver.finrfc = driver.find_element("xpath","//*[@id=\"txtR_Mail\"]") 
+    correo = driver.finrfc = driver.find_element("xpath",'//*[@id="txtR_Mail"]') 
     correo.send_keys(get_sheets()[num_factura][4]['Correo:'])
     correo.send_keys(Keys.ENTER)
     
-    domicilio_cp = driver.finrfc = driver.find_element("xpath","//*[@id=\"txtDomicilioFiscalReceptor\"]")
+    domicilio_cp = driver.finrfc = driver.find_element("xpath",'//*[@id="txtDomicilioFiscalReceptor"]')
     domicilio_cp.send_keys(get_sheets()[num_factura][5]['Domicilio Fiscal(C.P.):'])
+    print(str(get_sheets()[num_factura][5]['Domicilio Fiscal(C.P.):']))
     domicilio_cp.send_keys(Keys.ENTER)
 
     driver.implicitly_wait(10) # espera hasta 10 segundos
-    regimen_receptor = driver.find_element(By.XPATH, "//*[@id=\"ddlRegimenFiscalReceptor\"]")
+    regimen_receptor = driver.find_element(By.XPATH, '//*[@id="ddlRegimenFiscalReceptor"]')
     select = Select(regimen_receptor)
     select.select_by_value(str(int(round(get_sheets()[num_factura][6]['Regimen_Fiscal'],0))))
-
+    
 
     # Tab Datos del complemento
-    WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//*[@id=\"tabs\"]/ul/li[5]"))).click()
+    WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id=\"tabs\"]/ul/li[5]'))).click()
 
     # TOTALES
     taslados_base_iva = driver.finrfc = driver.find_element("xpath",'//*[@id="txtP_T_BaseIVA16"]')
-    taslados_base_iva.send_keys(get_sheets()[num_factura][8]['Traslados Base IVA 16'])
+    taslados_base_iva.clear()
+
+    taslados_base_iva_result = round(get_sheets()[num_factura][8]['Traslados Base IVA 16'],2)
+    taslados_base_iva_result_str = "{:.2f}".format(taslados_base_iva_result)
+
+    if len(taslados_base_iva_result_str.split('.')[1]) == 1:
+        taslados_base_iva_result_str += '0'
+
+    taslados_base_iva.send_keys(taslados_base_iva_result_str)
     taslados_base_iva.send_keys(Keys.ENTER)
 
     monto_total_pagos = driver.finrfc = driver.find_element("xpath",'//*[@id="txtP_T_MontoTotalPagos"]')
-    monto_total_pagos.send_keys(get_sheets()[num_factura][9]['Income Amount SUM 1'])
+    monto_total_pagos.clear()
+
+    monto_total_pagos_result = round(get_sheets()[num_factura][9]['Income Amount SUM 1'],2)
+    monto_total_pagos_result_str = "{:.2f}".format(monto_total_pagos_result)
+
+    if len(monto_total_pagos_result_str.split('.')[1]) == 1:
+        monto_total_pagos_result_str += '0'
+
+    monto_total_pagos.send_keys(monto_total_pagos_result_str)
     monto_total_pagos.send_keys(Keys.ENTER)
 
     traslados_impuesto = driver.finrfc = driver.find_element("xpath",'//*[@id="txtP_T_ImpuestosIVA16"]') 
-    traslados_impuesto.send_keys(get_sheets()[num_factura][10]['Traslados Impuestos IVA 16:'])
+    traslados_impuesto.clear()
+
+    traslados_impuesto_result = round(get_sheets()[num_factura][10]['Traslados Impuestos IVA 16:'],2)
+    traslados_impuesto_str = "{:.2f}".format(traslados_impuesto_result)
+
+    if len(traslados_impuesto_str.split('.')[1]) == 1:
+        traslados_impuesto_str += '0'
+
+    traslados_impuesto.send_keys(traslados_impuesto_str)
     traslados_impuesto.send_keys(Keys.ENTER)
 
 
@@ -127,7 +151,15 @@ def page_web(num_factura, debug):
 
     driver.implicitly_wait(10)
     monto = driver.finrfc = driver.find_element(By.XPATH, '//*[@id="txtP_Monto"]')
-    monto.send_keys(get_sheets()[num_factura][15]['*Monto:'])
+    monto.clear()
+
+    monto_result = round(get_sheets()[num_factura][15]['*Monto:'],2)
+    monto_result_str = "{:.2f}".format(monto_result)
+
+    if len(monto_result_str.split('.')[1]) == 1:
+        monto_result_str += '0'
+
+    monto.send_keys(monto_result_str)
     monto.send_keys(Keys.ENTER)
 
     time.sleep(1)
@@ -148,7 +180,14 @@ def page_web(num_factura, debug):
     driver.implicitly_wait(10)
     base = driver.finrfc = driver.find_element(By.XPATH, '//*[@id="TrasladoP_BaseP"]')
     base.clear()
-    base.send_keys(round(get_sheets()[num_factura][8]['Traslados Base IVA 16'],2))
+
+    base_result = round(get_sheets()[num_factura][8]['Traslados Base IVA 16'],2)
+    base_result_str = "{:.2f}".format(base_result)
+
+    if len(base_result_str.split('.')[1]) == 1:
+        base_result_str += '0'
+
+    base.send_keys(base_result_str)
     base.send_keys(Keys.ENTER)
 
 
@@ -170,7 +209,14 @@ def page_web(num_factura, debug):
     
     importe = driver.finrfc = driver.find_element(By.XPATH,'//*[@id="TrasladoP_ImporteP"]')
     importe.clear()
-    importe.send_keys(round(get_sheets()[num_factura][10]['Traslados Impuestos IVA 16:'],2))
+
+    importe_result = round(get_sheets()[num_factura][10]['Traslados Impuestos IVA 16:'],2)
+    importe_result_str = "{:.2f}".format(importe_result)
+
+    if len(importe_result_str.split('.')[1]) == 1:
+        importe_result_str += '0'
+
+    importe.send_keys(importe_result_str)
     importe.send_keys(Keys.ENTER)
 
 
@@ -226,14 +272,25 @@ def page_web(num_factura, debug):
         
         saldo_anterior = driver.finrfc = driver.find_element("xpath",'//*[@id="txtPDoc_ImpSaldoAnt"]')
         saldo_anterior.clear()
-        saldo_anterior.send_keys(round(lista_documentos_relacionados[4][i],2))
+        result_saldo_anterior = round(lista_documentos_relacionados[4][i],2)
+        result_saldo_anterior_str = "{:.2f}".format(result_saldo_anterior)
+
+        if len(result_saldo_anterior_str.split('.')[1]) == 1:
+            result_saldo_anterior_str += '0'
+        
+        saldo_anterior.send_keys(result_saldo_anterior_str)
         saldo_anterior.send_keys(Keys.ENTER)
         
         imp_pagado = driver.finrfc = driver.find_element("xpath",'//*[@id="txtPDoc_ImpPagado"]')
         imp_pagado.clear()
-        print(lista_documentos_relacionados[8][i])
-        print(round(lista_documentos_relacionados[8][i],2))
-        imp_pagado.send_keys(round(lista_documentos_relacionados[8][i],2))
+        
+        result_imp_pagado = round(lista_documentos_relacionados[8][i],2)
+        result_imp_pagado_str = "{:.2f}".format(result_imp_pagado)
+
+        if len(result_imp_pagado_str.split('.')[1]) == 1:
+            result_imp_pagado_str += '0'
+
+        imp_pagado.send_keys(result_imp_pagado_str)
         imp_pagado.send_keys(Keys.ENTER)
         
         saldo_insoluto = driver.finrfc = driver.find_element("xpath",'//*[@id="txtPDoc_ImpSaldoInsoluto"]')
@@ -268,7 +325,15 @@ def page_web(num_factura, debug):
 
         driver.implicitly_wait(10)
         base_dr = driver.finrfc = driver.find_element(By.XPATH, '//*[@id="TrasladoDR_BaseDR"]')
-        base_dr.send_keys(round(lista_documentos_relacionados[10][i],2))
+        base_dr.clear()
+
+        base_dr_result = round(lista_documentos_relacionados[10][i],2)
+        base_dr_result_str = "{:.2f}".format(base_dr_result)
+
+        if len(base_dr_result_str.split('.')[1]) == 1:
+            base_dr_result_str += '0'
+        
+        base_dr.send_keys(base_dr_result_str)
         base_dr.send_keys(Keys.ENTER)
 
 
@@ -289,7 +354,14 @@ def page_web(num_factura, debug):
 
         importe_dr = driver.finrfc = driver.find_element(By.XPATH,'//*[@id="TrasladoDR_ImporteDR"]')
         importe_dr.clear()
-        importe_dr.send_keys(round(lista_documentos_relacionados[12][i],2))
+
+        importe_dr_result = round(lista_documentos_relacionados[12][i],2)
+        importe_dr_result_str = "{:.2f}".format(importe_dr_result)
+
+        if len(importe_dr_result_str.split('.')[1]) == 1:
+            importe_dr_result_str += '0'
+
+        importe_dr.send_keys(importe_dr_result_str)
         importe_dr.send_keys(Keys.ENTER)
 
         # Boton Guardar (Ventana emergente)
@@ -327,7 +399,7 @@ def page_web(num_factura, debug):
     
     print("Factura Num. {}".format(get_sheets()[num_factura][0]['ID']))
 
-    time.sleep(300)
+    time.sleep(1)
 
     driver.quit()
 
@@ -342,11 +414,11 @@ if __name__ == "__main__":
           Si esta en Verdadero es productivo
     """
 
-    inicio = 1
-    fin = 1
+    inicio = 21
+    fin = 26
 
     rango_personalizado = range((inicio - 1), fin)
 
     for i in rango_personalizado:
-        page_web(i, False)
+        page_web(i, True)
 

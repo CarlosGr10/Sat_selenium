@@ -9,7 +9,7 @@ def path_system():
 def get_sheets():
     xls = pd.ExcelFile(path_system())
     sheets = xls.sheet_names
-    get_dates_xls =  pd.read_excel(path_system(), sheet_name=sheets[0])
+    get_dates_xls =  pd.read_excel(path_system(), sheet_name=sheets[0], dtype={'Domicilio Fiscal(C.P.):': str})
 
     #Imprimir las cabeceras
     #cabeceras = get_dates_xls.columns.tolist()
@@ -133,7 +133,7 @@ def get_sheets():
                         {'*Imp. Pagado':dic['*Imp. Pagado']},
                     {'*Saldo Insoluto:':dic['*Saldo Insoluto:']}])
 
-
+    
     return factura
 
 
@@ -144,9 +144,9 @@ def delete_nan(list_factura):
     new_list = [item for item in list_factura if not(pd.isnull(item)) == True]
     return new_list
 
-"""
 
-factura = 1
+
+factura = 17
 lista_factura = get_sheets()[factura - 1][0]['ID']
 
 lista_impuestos_p_traslados = [delete_nan(get_sheets()[factura - 1][16]['SubT_Linea']),
@@ -167,14 +167,10 @@ lista_impuestos_p_traslados = [delete_nan(get_sheets()[factura - 1][16]['SubT_Li
 
                                      
                                    
-print(f"factura: {lista_factura}")
+#print(f"factura: {lista_factura}")
+#print(get_sheets()[factura][5]['Domicilio Fiscal(C.P.):'])
 
-for i in lista_impuestos_p_traslados:
-    print(i)
 
-print(lista_impuestos_p_traslados)
-
-"""
 
 if __name__ == '__main__':
     get_sheets()
