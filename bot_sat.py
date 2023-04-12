@@ -404,7 +404,7 @@ def page_web(num_factura, debug):
     driver.quit()
 
 if __name__ == "__main__":
-
+    pass
     """
         INSTRUCTIONS
         Varibles en uso:
@@ -412,13 +412,15 @@ if __name__ == "__main__":
         - fin: Ultima factura a subir
         - page_web(i,True or False): 
           Si esta en Verdadero es productivo
+
+        inicio = 0
+        fin = 0
+
+        rango_personalizado = range((inicio - 1), fin)
+
+        for i in rango_personalizado:
+            page_web(i, True)
     """
 
-    inicio = 21
-    fin = 26
-
-    rango_personalizado = range((inicio - 1), fin)
-
-    for i in rango_personalizado:
-        page_web(i, True)
+    
 
