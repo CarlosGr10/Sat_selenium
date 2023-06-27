@@ -146,7 +146,7 @@ def delete_nan(list_factura):
 
 
 
-factura = 17
+factura = 1
 lista_factura = get_sheets()[factura - 1][0]['ID']
 
 lista_impuestos_p_traslados = [delete_nan(get_sheets()[factura - 1][16]['SubT_Linea']),

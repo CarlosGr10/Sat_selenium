@@ -367,7 +367,7 @@ def page_web(num_factura, debug):
         # Boton Guardar (Ventana emergente)
         wait = WebDriverWait(driver, 10)
         element = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".ui-dialog-buttonpane")))
-        guardar_button_dr = element.find_element(By.XPATH, '/html/body/div[13]/div[3]/div/button[1]')
+        guardar_button_dr = element.find_element(By.XPATH, '/html/body/div[12]/div[3]/div/button[1]')
         guardar_button_dr.click()
 
         # Boton para agregar otro UUid
